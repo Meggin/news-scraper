@@ -42,6 +42,9 @@ router.post("/", function(req, res) {
   request("http://www.nytimes.com/", function(error, response, html) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(html);
+
+    // Make emptry array for temporarily saving and showing scraped Articles.
+    var scrapedArticles = {};
     // Now, we grab every h2 within an article tag, and do the following:
     $("article h2").each(function(i, element) {
 
@@ -52,25 +55,19 @@ router.post("/", function(req, res) {
       result.title = $(this).children("a").text();
       result.link = $(this).children("a").attr("href");
 
-      // Todo: don't save article in database unless user requests to save it.
-      // Or else don't have the save button, and do something clever to make sure we aren't saving the same article.
-      // Using our Article model, create a new entry
-      // This effectively passes the result object to the entry (and the title and link)
-      var entry = new Article(result);
+      scrapedArticles[i] = result;
 
-      // Now, save that entry to the db
-      entry.save(function(err, doc) {
-        // Log any errors
-        if (err) {
-          console.log(err);
-        }
-        // Or log the doc
-        else {
-          console.log(doc);
-        }
-      });
     });
-    res.redirect("/");
+
+    console.log("Scraped Articles object built nicely: " + scrapedArticles);
+
+    var hbsArticleObject = {
+        articles: scrapedArticles
+    };
+
+    res.render("index", hbsArticleObject);
+
+    //res.redirect("/");
   });
 });
 
