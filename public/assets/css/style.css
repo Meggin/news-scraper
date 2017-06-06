@@ -1,0 +1,11 @@
+html {
+	
+}
+
+/* 
+  These rules take effect when the browser's width
+  is 640px or less.
+*/
+@media screen and (max-width: 640px) {
+	
+}
