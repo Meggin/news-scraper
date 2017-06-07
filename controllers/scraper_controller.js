@@ -14,8 +14,16 @@ mongoose.Promise = Promise;
 var Note = require("../models/Note.js");
 var Article = require("../models/Article.js");
 
-// This will get the articles we scraped from the mongoDB
 router.get("/", function(req, res) {
+  res.render("index");
+});
+
+router.get("/savedarticles", function(req, res) {
+  res.render("savedarticles");
+})
+
+// This will get the articles we scraped and saved from the mongoDB
+router.get("/saved", function(req, res) {
 
   // Grab every doc in the Articles array
   Article.find({}, function(error, doc) {
@@ -29,14 +37,14 @@ router.get("/", function(req, res) {
         articles: doc
       };
 
-      res.render("index", hbsArticleObject);
+      res.render("savedarticles", hbsArticleObject);
     }
   });
 
 });
 
 // A GET request to scrape the echojs website
-router.post("/", function(req, res) {
+router.post("/scrape", function(req, res) {
 
   // First, we grab the body of the html with request
   request("http://www.nytimes.com/", function(error, response, html) {
@@ -67,8 +75,34 @@ router.post("/", function(req, res) {
 
     res.render("index", hbsArticleObject);
 
-    //res.redirect("/");
   });
+});
+
+router.post("/save", function(req, res) {
+
+  var newArticleObject = {};
+
+  newArticleObject.title = req.body.title;
+  newArticleObject.link = req.body.link;
+
+  var entry = new Article(newArticleObject);
+
+  console.log("We can save the article: " + entry);
+
+  // Now, save that entry to the db
+  entry.save(function(err, doc) {
+    // Log any errors
+    if (err) {
+      console.log(err);
+    }
+    // Or log the doc
+    else {
+      console.log(doc);
+    }
+  });
+
+  res.redirect("/savedarticles");
+
 });
 
 // This will grab an article by it's ObjectId

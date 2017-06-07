@@ -14,8 +14,8 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="/savedarticles">Saved Articles</a></li>
+        <li><a href="/">Home</a></li>
+        <li class="active"><a href="/savedarticles">Saved Articles <span class="sr-only">(current)</span></a></li>
       </ul>
       <form action="/scrape" method="POST" class="navbar-form navbar-left">
         <button type="submit" class="btn btn-default">SCRAPE NEW ARTICLES!</button>
@@ -38,11 +38,6 @@
           <li>
             {{this.title}}
             {{this.link}}
-            <form action="/save" method="POST" class="navbar-form navbar-left">
-              <input id="article-title" type="hidden" name="title" value={{this.title}}>
-              <input id="article-link" type="hidden" name="link" value={{this.link}}>
-              <button type="submit" class="btn btn-default">SAVE ARTICLE</button>
-            </form>
           </li>
         {{/each}}
       </ul>
