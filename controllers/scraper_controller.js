@@ -18,12 +18,8 @@ router.get("/", function(req, res) {
   res.render("index");
 });
 
+// This will get the articles scraped and saved in db and show them in list.
 router.get("/savedarticles", function(req, res) {
-  res.render("savedarticles");
-})
-
-// This will get the articles we scraped and saved from the mongoDB
-router.get("/saved", function(req, res) {
 
   // Grab every doc in the Articles array
   Article.find({}, function(error, doc) {
@@ -40,7 +36,6 @@ router.get("/saved", function(req, res) {
       res.render("savedarticles", hbsArticleObject);
     }
   });
-
 });
 
 // A GET request to scrape the echojs website
