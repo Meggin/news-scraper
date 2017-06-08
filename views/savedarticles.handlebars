@@ -38,10 +38,11 @@
           <li>
             {{this.title}}
             {{this.link}}
-            <form action="/articles/:{{this.id}}" method="GET" class="navbar-form navbar-left">
+            <form action="/notes/{{this.id}}" method="GET" class="navbar-form navbar-left">
               <button type="submit" class="btn btn-default">ARTICLE NOTES</button>
             </form>
-            <form action="/delete/:{{this.id}}" method="POST" class="navbar-form navbar-left">
+            <a href="/articlenotes/{{this.id}}"><button class="btn btn-default">ARTICLE NOTES</button></a>
+            <form action="/delete/{{this.id}}?_method=DELETE method="POST" class="navbar-form navbar-left">
               <button type="submit" class="btn btn-default">DELETE FROM SAVED</button>
             </form>
           </li>
@@ -49,4 +50,9 @@
       </ul>
     </div>
   </div>
+  <div id="notes"></div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script> src="app.js"</script>

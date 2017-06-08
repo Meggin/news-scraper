@@ -38,6 +38,25 @@ router.get("/savedarticles", function(req, res) {
   });
 });
 
+router.get("/notes/:id", function(req, res) {
+  console.log("We are in article notes for: " + req.params.id);
+
+  Article.findOne({ "_id": req.params.id })
+    // ..and populate all of the notes associated with it
+    .populate("note")
+    // now, execute our query
+    .exec(function(error, doc) {
+      // Log any errors
+      if (error) {
+        console.log(error);
+      }
+      // Otherwise, send the doc to the browser as a json object
+      else {
+        res.json(doc);
+      }
+    });
+});
+
 // A GET request to scrape the echojs website
 router.post("/scrape", function(req, res) {
 
@@ -100,21 +119,43 @@ router.post("/save", function(req, res) {
 
 });
 
+router.get("/delete/:id", function(req, res) {
+
+  console.log("ID is getting read for delete" + req.params.id);
+
+  console.log("Able to activate delete function.");
+
+  Article.findOneAndRemove({"_id": req.params.id}, function (err, offer) {
+    if (err) {
+      console.log("Not able to delete:" + err);
+    } else {
+      console.log("Able to delete, Yay");
+    }
+    res.redirect("/savedarticles");
+  });
+});
+
 // This will grab an article by it's ObjectId
 router.get("/articles/:id", function(req, res) {
 
+  console.log("ID is getting read" + req.params.id);
+
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-  Article.findOne({ "_id": req.params.id })
+  Article.findOne({"_id": req.params.id})
   // ..and populate all of the notes associated with it
+
   .populate("note")
   // now, execute our query
   .exec(function(error, doc) {
     // Log any errors
     if (error) {
-      console.log(error);
+      console.log("Not getting notes" + error);
     }
     // Otherwise, send the doc to the browser as a json object
     else {
+
+      console.log("Getting notes without errors: " + res.json(doc));
+
       res.json(doc);
     }
   });
@@ -140,10 +181,11 @@ router.post("/articles/:id", function(req, res) {
       .exec(function(err, doc) {
         // Log any errors
         if (err) {
-          console.log(err);
+          console.log("Not able to get notes");
         }
         else {
           // Or send the document to the browser
+          console.log("We are getting notes");
           res.send(doc);
         }
       });
