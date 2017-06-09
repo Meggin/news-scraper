@@ -31,28 +31,99 @@
       PLACEHOLDER FOR JUMBOTRON AND IMAGE.
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <ul>
-        {{#each articles}}
-          <li>
-            {{this.title}}
-            {{this.link}}
-            <form action="/notes/{{this.id}}" method="GET" class="navbar-form navbar-left">
-              <button type="submit" class="btn btn-default">ARTICLE NOTES</button>
-            </form>
-            <a href="/articlenotes/{{this.id}}"><button class="btn btn-default">ARTICLE NOTES</button></a>
-            <form action="/delete/{{this.id}}?_method=DELETE method="POST" class="navbar-form navbar-left">
-              <button type="submit" class="btn btn-default">DELETE FROM SAVED</button>
-            </form>
-          </li>
-        {{/each}}
-      </ul>
+  {{#each articles}}
+    <div class="row">
+      <div class="col-md-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title pull-left">{{this.title}}</h3>
+              <div class="btn-group pull-right">
+                <button id="modalbutton" type="submit" class="btn btn-default btn-sm pull-right" data-toggle="modal" data-id={{this.id}} data-target="#myModal">ARTICLE NOTES</button>
+                <form action="/delete/{{this.id}}?_method=DELETE method="POST">
+                  <button type="submit" class="btn btn-default btn-sm pull-right">DELETE FROM SAVED</button>
+                </form>
+              </div>
+            </div
+            <div class="panel-body">
+              {{this.link}}
+            </div>
+          </div>
+      </div>
+    </div>
+  {{/each}}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><span id="articleID"></span></h4>
+      </div>
+      <div class="modal-body">
+        <div id="notes"></div>
+      </div>
     </div>
   </div>
-  <div id="notes"></div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
-<script> src="app.js"</script>
+<script>
+  // Whenever someone clicks a modal tag
+$(document).on("click", "#modalbutton", function() {
+  // Empty the notes from the note section
+  $("#notes").empty();
+  // Save the id from the button tag
+  var thisId = $(this).attr("data-id");
+  // Now make an ajax call for the Article
+  $.ajax({
+    method: "GET",
+    url: "/articles/" + thisId
+  })
+    // With that done, add the note information to the page
+    .done(function(data) {
+      console.log(data);
+      // The title of the article
+      $("#notes").append("<h2>Notes for Article" + data._id + "</h2>");
+      // Placeholder for notes
+      $("#notes").append("<div id='actualnotes'></div>");
+      // A textarea to add a new note body
+      $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+      // A button to submit a new note, with the id of the article saved to it
+      $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+      // If there's a note in the article
+      if (data.note) {
+        // Place the body of the note in the body textarea
+        $("#actualnotes").val(data.note.body);
+      } else {
+        $("#actualnotes").val("There aren't any notes yet.");
+      }
+    });
+});
+
+// When you click the savenote button
+$(document).on("click", "#savenote", function() {
+  // Grab the id associated with the article from the submit button
+  var thisId = $(this).attr("data-id");
+  // Run a POST request to change the note, using what's entered in the inputs
+  $.ajax({
+    method: "POST",
+    url: "/articles/" + thisId,
+    data: {
+      // Value taken from note textarea
+      body: $("#bodyinput").val()
+    }
+  })
+    // With that done
+    .done(function(data) {
+      // Log the response
+      console.log(data);
+      // Empty the notes section
+      $("#notes").empty();
+    });
+  // Also, remove the values entered in the input and textarea for note entry
+  $("#bodyinput").val("");
+});
+</script>

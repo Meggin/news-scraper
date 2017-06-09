@@ -38,25 +38,6 @@ router.get("/savedarticles", function(req, res) {
   });
 });
 
-router.get("/notes/:id", function(req, res) {
-  console.log("We are in article notes for: " + req.params.id);
-
-  Article.findOne({ "_id": req.params.id })
-    // ..and populate all of the notes associated with it
-    .populate("note")
-    // now, execute our query
-    .exec(function(error, doc) {
-      // Log any errors
-      if (error) {
-        console.log(error);
-      }
-      // Otherwise, send the doc to the browser as a json object
-      else {
-        res.json(doc);
-      }
-    });
-});
-
 // A GET request to scrape the echojs website
 router.post("/scrape", function(req, res) {
 
@@ -149,12 +130,10 @@ router.get("/articles/:id", function(req, res) {
   .exec(function(error, doc) {
     // Log any errors
     if (error) {
-      console.log("Not getting notes" + error);
+      console.log(error);
     }
     // Otherwise, send the doc to the browser as a json object
     else {
-
-      console.log("Getting notes without errors: " + res.json(doc));
 
       res.json(doc);
     }

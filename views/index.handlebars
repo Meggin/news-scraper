@@ -31,21 +31,24 @@
       PLACEHOLDER FOR JUMBOTRON AND IMAGE.
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <ul>
-        {{#each articles}}
-          <li>
-            {{this.title}}
-            {{this.link}}
-            <form action="/save" method="POST" class="navbar-form navbar-left">
+  {{#each articles}}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left">{{this.title}}</h3>
+            <form action="/save" method="POST">
               <input id="article-title" type="hidden" name="title" value={{this.title}}>
               <input id="article-link" type="hidden" name="link" value={{this.link}}>
-              <button type="submit" class="btn btn-default">SAVE ARTICLE</button>
+              <button type="submit" class="btn btn-default pull-right">SAVE ARTICLE</button>
             </form>
-          </li>
-        {{/each}}
-      </ul>
+          </div
+          <div class="panel-body">
+            {{this.link}}
+          </div>
+        </div>
+          
+      </div>
     </div>
-  </div>
+  {{/each}}
 </div>
