@@ -59,7 +59,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel"><span id="articleID"></span></h4>
+        <h4 class="modal-title" id="myModalLabel">Notes for Article <span id="articleID"></span></h4>
       </div>
       <div class="modal-body">
         <div id="notes"></div>
@@ -77,6 +77,7 @@ $(document).on("click", "#modalbutton", function() {
   $("#notes").empty();
   // Save the id from the button tag
   var thisId = $(this).attr("data-id");
+  $("#articleID").text(thisId);
   // Now make an ajax call for the Article
   $.ajax({
     method: "GET",
@@ -85,21 +86,17 @@ $(document).on("click", "#modalbutton", function() {
     // With that done, add the note information to the page
     .done(function(data) {
       console.log(data);
-      // The title of the article
-      $("#notes").append("<h2>Notes for Article" + data._id + "</h2>");
       // Placeholder for notes
-      $("#notes").append("<div id='actualnotes'></div>");
+      $("#notes").append("<p id='actualnotes'></p>");
+      if (data.note) {
+        $('#actualnotes').text(data.note.body);
+      } else {
+        $("#actualnotes").text("There aren't any notes yet.");
+      }
       // A textarea to add a new note body
       $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
       // A button to submit a new note, with the id of the article saved to it
       $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
-      // If there's a note in the article
-      if (data.note) {
-        // Place the body of the note in the body textarea
-        $("#actualnotes").val(data.note.body);
-      } else {
-        $("#actualnotes").val("There aren't any notes yet.");
-      }
     });
 });
 
