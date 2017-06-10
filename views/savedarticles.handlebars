@@ -79,6 +79,7 @@ $(document).on("click", "#modalbutton", function() {
   // Save the id from the button tag
   var thisId = $(this).attr("data-id");
   $("#articleID").text(thisId);
+
   // Now make an ajax call for the Article
   $.ajax({
     method: "GET",
@@ -89,8 +90,12 @@ $(document).on("click", "#modalbutton", function() {
       console.log(data);
       // Placeholder for notes
       $("#notes").append("<p id='actualnotes'></p>");
-      if (data.note) {
-        $('#actualnotes').text(data.note.body);
+      if (data.notes) {
+        $("#notes").append("<ul id='notelist'>");
+          for (var i = 0; i < data.notes.length; i++) {
+            $("#notes").append("<li>" + data.notes[i].body + "</li>");
+          }
+        $("#notes").append("</ul>");
       } else {
         $("#actualnotes").text("There aren't any notes yet.");
       }
