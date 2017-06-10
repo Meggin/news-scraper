@@ -123,22 +123,18 @@ router.get("/articles/:id", function(req, res) {
 
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
   Article.findOne({"_id": req.params.id})
-  // ..and populate all of the notes associated with it
 
-  .populate("notes")
-  // now, execute our query
-  .exec(function(error, doc) {
-    // Log any errors
-    if (error) {
-      console.log(error);
+  .populate('notes')
+
+  .exec(function(err, doc) {
+    if (err) {
+      console.log("Not able to find article and get notes.");
     }
-    // Otherwise, send the doc to the browser as a json object
     else {
-
+      console.log("We are getting article and maybe notes? " + doc.notes);
       res.json(doc);
     }
   });
-
 });
 
 // Create a new note or replace an existing note
@@ -154,32 +150,17 @@ router.post("/articles/:id", function(req, res) {
     } 
     else {
       // Use the article id to find it and then push note
-      Article.findOneAndUpdate({ "_id": req.params.id }, function (err, article) {
-        if (err) {
-          console.log("Cannot find article.");
-        } else {
-          article.notes.push(doc._id);
+      Article.findOneAndUpdate({ "_id": req.params.id }, {$push: {notes: doc._id}}, {safe: true, upsert: true},
+        function (err, article) {
+          if (err) {
+            console.log("Cannot find article.");
+          } else {
+            res.send(doc);
+          }
         }
-      })
-
-      .populate('notes')
-
-      // Execute the above query
-      .exec(function(err, doc) {
-        // Log any errors
-        if (err) {
-          console.log("Not able to get notes");
-        }
-        else {
-          
-          // Or send the document to the browser
-          console.log("We are getting notes");
-          res.send(doc);
-        }
-      });
+      )
     }
-  });
+  })
 });
-
 // Export routes for server.js to use.
 module.exports = router;
