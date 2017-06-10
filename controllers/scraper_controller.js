@@ -145,9 +145,7 @@ router.get("/articles/:id", function(req, res) {
 router.post("/articles/:id", function(req, res) {
 
   // Create a new note and pass the req.body to the entry
-  var newNote = new Note({
-    body: req.body
-  });
+  var newNote = new Note(req.body);
   // And save the new note the db
   newNote.save(function(error, doc) {
     // Log any errors
@@ -156,9 +154,13 @@ router.post("/articles/:id", function(req, res) {
     } 
     else {
       // Use the article id to find it and then push note
-      Article.findOneAndUpdate({ "_id": req.params.id })
-
-      .notes(push(doc._id))
+      Article.findOneAndUpdate({ "_id": req.params.id }, function (err, article) {
+        if (err) {
+          console.log("Cannot find article.");
+        } else {
+          article.notes.push(doc._id);
+        }
+      })
 
       .populate('notes')
 
