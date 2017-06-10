@@ -125,7 +125,7 @@ router.get("/articles/:id", function(req, res) {
   Article.findOne({"_id": req.params.id})
   // ..and populate all of the notes associated with it
 
-  .populate("note")
+  .populate("notes")
   // now, execute our query
   .exec(function(error, doc) {
     // Log any errors
@@ -145,17 +145,23 @@ router.get("/articles/:id", function(req, res) {
 router.post("/articles/:id", function(req, res) {
 
   // Create a new note and pass the req.body to the entry
-  var newNote = new Note(req.body);
+  var newNote = new Note({
+    body: req.body
+  });
   // And save the new note the db
   newNote.save(function(error, doc) {
     // Log any errors
     if (error) {
       console.log(error);
-    }
-    // Otherwise
+    } 
     else {
-      // Use the article id to find and update it's note
-      Article.findOneAndUpdate({ "_id": req.params.id }, { "note": doc._id })
+      // Use the article id to find it and then push note
+      Article.findOneAndUpdate({ "_id": req.params.id })
+
+      .notes(push(doc._id))
+
+      .populate('notes')
+
       // Execute the above query
       .exec(function(err, doc) {
         // Log any errors
@@ -163,6 +169,7 @@ router.post("/articles/:id", function(req, res) {
           console.log("Not able to get notes");
         }
         else {
+          
           // Or send the document to the browser
           console.log("We are getting notes");
           res.send(doc);
@@ -170,7 +177,6 @@ router.post("/articles/:id", function(req, res) {
       });
     }
   });
-
 });
 
 // Export routes for server.js to use.
