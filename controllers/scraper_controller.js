@@ -102,17 +102,33 @@ router.post("/save", function(req, res) {
 
 router.get("/delete/:id", function(req, res) {
 
-  console.log("ID is getting read for delete" + req.params.id);
+  console.log("ID is getting read for notes delete" + req.params.id);
 
-  console.log("Able to activate delete function.");
+  console.log("Able to delete notes.");
 
-  Article.findOneAndRemove({"_id": req.params.id}, function (err, offer) {
+  Note.findOneAndRemove({"_id": req.params.id}, function (err, offer) {
     if (err) {
       console.log("Not able to delete:" + err);
     } else {
       console.log("Able to delete, Yay");
     }
     res.redirect("/savedarticles");
+  });
+});
+
+router.get("/notes/:id", function(req, res) {
+
+  console.log("ID is getting read for delete" + req.params.id);
+
+  console.log("Able to activate delete function.");
+
+  Note.findOneAndRemove({"_id": req.params.id}, function (err, doc) {
+    if (err) {
+      console.log("Not able to delete:" + err);
+    } else {
+      console.log("Able to delete, Yay");
+    }
+    res.send(doc);
   });
 });
 
@@ -150,17 +166,20 @@ router.post("/articles/:id", function(req, res) {
     } 
     else {
       // Use the article id to find it and then push note
-      Article.findOneAndUpdate({ "_id": req.params.id }, {$push: {notes: doc._id}}, {safe: true, upsert: true},
-        function (err, article) {
-          if (err) {
-            console.log("Cannot find article.");
-          } else {
-            res.send(doc);
-          }
+      Article.findOneAndUpdate({ "_id": req.params.id }, {$push: {notes: doc._id}}, {new: true, upsert: true})
+
+      .populate('notes')
+
+      .exec(function (err, doc) {
+        if (err) {
+          console.log("Cannot find article.");
+        } else {
+          console.log("On note save we are getting notes? " + doc.notes);
+          res.send(doc);
         }
-      )
+      });
     }
-  })
+  });
 });
 // Export routes for server.js to use.
 module.exports = router;

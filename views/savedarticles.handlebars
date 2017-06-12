@@ -93,7 +93,9 @@ $(document).on("click", "#modalbutton", function() {
       if (data.notes) {
         $("#notes").append("<ul id='notelist'>");
           for (var i = 0; i < data.notes.length; i++) {
-            $("#notes").append("<li>" + data.notes[i].body + "</li>");
+            $("#notes").append("<li>" + data.notes[i].body + 
+            "<button data-id='" + data.notes[i]._id +
+            "' id='deletenote'>X</button></li>");
           }
         $("#notes").append("</ul>");
       } else {
@@ -121,12 +123,34 @@ $(document).on("click", "#savenote", function() {
   })
     // With that done
     .done(function(data) {
-      // Log the response
-      console.log(data);
-      // Empty the notes section
-      $("#notes").empty();
+      $("#notelist").empty();
+      for (var i = 0; i < data.notes.length; i++) {
+        $("#notelist").append("<li>" + data.notes[i].body +
+                           "<button data-id='" + data.notes[i]._id +
+                           "' id='deletenote'>X</button></li>");
+      }
     });
   // Also, remove the values entered in the input and textarea for note entry
   $("#bodyinput").val("");
+});
+
+// When you click the deletenote button
+$(document).on("click", "#deletenote", function() {
+  // Grab the id associated with the note
+  var thisId = $(this).attr("data-id");
+  // Run a POST request to delete the note
+  $.ajax({
+    method: "GET",
+    url: "/notes/" + thisId,
+  })
+    // With that done
+    .done(function(data) {
+      $("#notelist").empty();
+      for (var i = 0; i < data.notes.length; i++) {
+        $("#notelist").append("<li>" + data.notes[i].body +
+                           "<button data-id='" + data.notes[i]._id +
+                           "' id='deletenote'>X</button></li>");
+      }
+    });
 });
 </script>
