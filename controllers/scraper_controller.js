@@ -56,6 +56,9 @@ router.post("/scrape", function(req, res) {
 
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this).children("a").text();
+
+      console.log("What's the result title? " + result.title);
+      
       result.link = $(this).children("a").attr("href");
 
       scrapedArticles[i] = result;
@@ -75,9 +78,12 @@ router.post("/scrape", function(req, res) {
 
 router.post("/save", function(req, res) {
 
+  console.log("This is the title: " + req.body.title);
+
   var newArticleObject = {};
 
   newArticleObject.title = req.body.title;
+
   newArticleObject.link = req.body.link;
 
   var entry = new Article(newArticleObject);

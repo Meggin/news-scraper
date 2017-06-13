@@ -2,10 +2,18 @@ html {
 	font-size: 12px;
 }
 
+li { 
+    margin-bottom: 1%;
+}
+
 p {
 	font-size: 16px;
 	margin-left: 1%;
 	margin-top: 1%;
+}
+
+#bodyinput {
+    width: 50%;
 }
 
 .jumbotron {
@@ -25,6 +33,10 @@ p {
 
 .panel-primary {
     height: 135px;
+}
+
+#savenote {
+    display: block;
 }
 
 /* 
