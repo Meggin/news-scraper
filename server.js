@@ -35,14 +35,7 @@ var routes = require("./controllers/scraper_controller.js");
 
 app.use("/", routes);
 
-// Database configuration with mongoose
-var databaseUri = 'mongodb://localhost/mongoscraper';
-
-if (process.env.MONGODB_URI) {
-	mongoose.connect(process.env.MONGODB_URI);
-} else {
-	mongoose.connect(databaseUri);
-}
+mongoose.connect("mongodb://heroku_rq49t835:mpat6ct4jvgh4bcop7l08rtivj@ds123752.mlab.com:23752/heroku_rq49t835");
 
 var db = mongoose.connection;
 
