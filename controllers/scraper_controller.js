@@ -102,11 +102,11 @@ router.post("/save", function(req, res) {
 
 router.get("/delete/:id", function(req, res) {
 
-  console.log("ID is getting read for notes delete" + req.params.id);
+  console.log("ID is getting read for delete" + req.params.id);
 
-  console.log("Able to delete notes.");
+  console.log("Able to activate delete function.");
 
-  Note.findOneAndRemove({"_id": req.params.id}, function (err, offer) {
+  Article.findOneAndRemove({"_id": req.params.id}, function (err, offer) {
     if (err) {
       console.log("Not able to delete:" + err);
     } else {
