@@ -1,10 +1,10 @@
 # news-scraper
 News scraper app that uses cheerio to scrape a news site, mongodb to save news articles and comments, and express to serve the site and data.
 
-Couple of key notes: while the main functionality is working, the styles aren't great. Also, there's javascript in handlebars, and really, it should be pulled out, but the modals weren't working properly when I tried to do this.
+I've managed to tweak this a bit so it doesn't look horrible and the main functionality works as expected.
 
-Also, I've tried to upload to heroku, and am having trouble with mlab-- using this for the first time. It's just some sort of weird setting/syntax issue, that I will attempt to resolve soon.
+More could be done to inform the user, and it could be a bit flashier, but it's clean and it works all right for an MVP.
 
-In the meantime, here's a screen recording of how things are looking: [https://youtu.be/uwgCTdXvWEg](https://youtu.be/uwgCTdXvWEg).
+Here's a link to the app: https://pure-woodland-61367.herokuapp.com/
 
 Phew-- busy week. Onward to react.
