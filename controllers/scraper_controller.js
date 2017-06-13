@@ -147,7 +147,7 @@ router.get("/articles/:id", function(req, res) {
       console.log("Not able to find article and get notes.");
     }
     else {
-      console.log("We are getting article and maybe notes? " + doc.notes);
+      console.log("We are getting article and maybe notes? " + doc);
       res.json(doc);
     }
   });
