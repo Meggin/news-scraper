@@ -101,8 +101,8 @@ $(document).on("click", "#modalbutton", function() {
       // Placeholder for notes
       $("#notes").append("<p id='actualnotes'></p>");
       if (data.notes) {
+        $("#actualnotes").empty();
         $("#notes").append("<ul id='notelist'>");
-          $("#notelist").empty();
           for (var i = 0; i < data.notes.length; i++) {
             $("#notes").append("<li id='" + data.notes[i]._id + "'>" + data.notes[i].body + " " +
             "<button data-id='" + data.notes[i]._id +
