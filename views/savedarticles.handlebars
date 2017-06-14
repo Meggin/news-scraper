@@ -135,9 +135,8 @@ $(document).on("click", "#savenote", function() {
     .done(function(data) {
       $("#notelist").empty();
       for (var i = 0; i < data.notes.length; i++) {
-        $("#notelist").append("<li id='" + data.notes[i]._id + "'>" + data.notes[i].body +
-                           "<button data-id='" + data.notes[i]._id +
-                           "' id='deletenote'>X</button></li>");
+        $("#notelist").append("<li id='" + data.notes[i]._id + "'>" + data.notes[i].body + " " + "<button data-id='" + data.notes[i]._id +
+        "' id='deletenote'>X</button></li>");
       }
     });
   // Also, remove the values entered in the input and textarea for note entry
