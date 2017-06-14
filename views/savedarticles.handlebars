@@ -134,7 +134,7 @@ $(document).on("click", "#savenote", function() {
   })
     // With that done
     .done(function(data) {
-      $("#notelist").empty();
+      $("#actualnotes").empty();
       for (var i = 0; i < data.notes.length; i++) {
         $("#notelist").append("<li id='" + data.notes[i]._id + "'>" + data.notes[i].body + " " + "<button data-id='" + data.notes[i]._id +
         "' id='deletenote'>X</button></li>");
